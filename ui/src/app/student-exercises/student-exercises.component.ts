@@ -36,10 +36,7 @@ export class StudentExercisesComponent implements OnInit {
   ngOnInit(): void {
     this.loading = true;
 
-    const exMap: { [key: number]: Exercise } = {};
-
     const getExercises = this.myCodeService.getExercises({}).pipe(tap(resp => {
-      resp.exercises.forEach(e => exMap[e.id] = e);
       this.exercises = resp.exercises.reduce((es, e) => {
         return { ...es, [e.language]: [...es[e.language] || [], e] };
       }, {});
@@ -54,12 +51,7 @@ export class StudentExercisesComponent implements OnInit {
       }, {});
     }));
 
-    const sidToEx: { [key: number]: Exercise } = {};
-
     const getSolutions = this.myCodeService.getSolutions({}).pipe(tap(resp => {
-      resp.solutions.forEach(ss => {
-        sidToEx[ss.id] = exMap[ss.exercise_id];
-      });
       this.latestSolutions = {};
       this.solutions = resp.solutions.reduce((ss, s) => {
         if (!this.latestSolutions[s.exercise_id] || this.latestSolutions[s.exercise_id].id < s.id) {
@@ -84,6 +76,28 @@ export class StudentExercisesComponent implements OnInit {
         this.solutionsStats[st.solution_id][st.status]++;
         return { ...sts, [st.solution_id]: [...(sts[st.solution_id] || []), st] };
       }, {});
+    }));
+
+    this.languageNames = languages.reduce((ls, l) => {
+      return { ...ls, [l.id]: l.name };
+    }, {});
+
+    this.languageExtensions = languages.reduce((ls, l) => {
+      return { ...ls, [l.id]: l.extension };
+    }, {});
+
+    combineLatest([getExercises, getTests, getSolutions, getSolutionsTests]).subscribe(([eResp, tResp, sResp, stResp]) => {
+      this.loading = false;
+
+      const exMap: { [key: number]: Exercise } = {};
+
+      eResp.exercises.forEach(e => exMap[e.id] = e);
+
+      const sidToEx: { [key: number]: Exercise } = {};
+
+      sResp.solutions.forEach(ss => {
+        sidToEx[ss.id] = exMap[ss.exercise_id];
+      });
 
       const scale = chroma.scale(['red', '#e6e600', 'green']);
 
@@ -109,18 +123,6 @@ export class StudentExercisesComponent implements OnInit {
           }
         }
       }
-    }));
-
-    this.languageNames = languages.reduce((ls, l) => {
-      return { ...ls, [l.id]: l.name };
-    }, {});
-
-    this.languageExtensions = languages.reduce((ls, l) => {
-      return { ...ls, [l.id]: l.extension };
-    }, {});
-
-    combineLatest([getExercises, getTests, getSolutions, getSolutionsTests]).subscribe(() => {
-      this.loading = false;
     });
   }
 

@@ -22,7 +22,7 @@
           {{e.description}}
         </markdown>
         <div *ngIf="latestSolutions[e.id]">
-          <h3>
+          <h3 *ngIf="solutionsStats[latestSolutions[e.id].id] && scores[latestSolutions[e.id].id]">
             <span>
               Последнее решение
               <span class="grey">#{{latestSolutions[e.id].id}}</span>:
