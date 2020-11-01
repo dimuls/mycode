@@ -1,0 +1,292 @@
+syntax = "proto3";
+
+package mycode;
+
+option go_package=".;mycode";
+
+import "runner.proto";
+
+message User {
+  int64 id = 1;
+  string login = 3;
+  bytes password_hash = 4;
+}
+
+message Teacher {
+  int64 id = 1;
+  int64 user_id = 2;
+  string name = 3;
+}
+
+message Class {
+  int64 id = 1;
+  int64 teacher_id = 2;
+  string name = 3;
+}
+
+message Student {
+  int64 id = 1;
+  int64 user_id = 2;
+  int64 class_id = 3;
+  string name = 4;
+}
+
+enum ExerciseEstimator {
+  linear = 0;
+  exponential = 1;
+  logarithmic = 2;
+}
+
+message Exercise {
+  int64 id = 1;
+  int64 teacher_id = 2;
+  string title = 4;
+  string description = 5;
+  Language language = 6;
+  ExerciseEstimator estimator = 7;
+}
+
+enum TestType {
+  simple = 0;
+  checker = 1;
+}
+
+message Test {
+  int64 id = 1;
+  int64 exercise_id = 2;
+  TestType type = 3;
+  string name = 4;
+  string max_duration = 5;
+  string max_memory = 6;
+  string stdin = 7;
+  string expected_stdout = 8;
+  string checker_language = 9;
+  string checker_source = 10;
+}
+
+message Solution {
+  int64 id = 1;
+  int64 student_id = 2;
+  int64 exercise_id = 3;
+  string source = 4;
+}
+
+enum SolutionTestStatus {
+  processing = 0;
+  failed = 1;
+  succeed = 2;
+}
+
+message SolutionTestFails {
+  bool wrong_duration = 1;
+  bool wrong_used_memory = 2;
+  bool wrong_stdout = 3;
+  bool wrong_checker = 4;
+}
+
+message SolutionTest {
+  int64 id = 1;
+  int64 solution_id = 2;
+  int64 test_id = 3;
+  SolutionTestStatus status = 4;
+  string duration = 5;
+  string used_memory = 6;
+  string stdout = 7;
+  string stderr = 8;
+  string checker_stdout = 9;
+  string checker_stderr = 10;
+  SolutionTestFails fails = 11;
+}
+
+service API {
+  rpc Login(LoginReq) returns (LoginResp);
+
+  rpc GetClasses(GetClassesReq) returns (GetClassesResp);
+  rpc GetStudents(GetStudentsReq) returns (GetStudentsResp);
+
+  rpc GetExercise(GetExerciseReq) returns (GetExerciseResp);
+  rpc AddExercise(AddExerciseReq) returns (AddExerciseResp);
+  rpc EditExercise(EditExerciseReq) returns (EditExerciseResp);
+  rpc RemoveExercise(RemoveExerciseReq) returns (RemoveExerciseResp);
+  rpc GetExercises(GetExercisesReq) returns (GetExercisesResp);
+  rpc GetExerciseAssignments(GetExerciseAssignmentsReq)
+      returns (GetExerciseAssignmentsResp);
+  rpc AssignExercise(AssignExerciseReq) returns (AssignExerciseResp);
+  rpc WithdrawExercise(WithdrawExerciseReq) returns (WithdrawExerciseResp);
+
+  rpc AddTest(AddTestReq) returns (AddTestResp);
+  rpc EditTest(EditTestReq) returns (EditTestResp);
+  rpc RemoveTest(RemoveTestReq) returns (RemoveTestResp);
+  rpc GetTests(GetTestsReq) returns (GetTestsResp);
+
+  rpc AddSolution(AddSolutionReq) returns (AddSolutionResp);
+  rpc GetSolutions(GetSolutionsReq) returns (GetSolutionsResp);
+
+  rpc GetSolutionTests(GetSolutionTestsReq) returns (GetSolutionTestsResp);
+}
+
+message LoginReq {
+  string login = 1;
+  string password = 2;
+}
+
+message LoginResp {
+  string jwt = 1;
+  Teacher teacher = 2;
+  Student student = 3;
+}
+
+message GetClassesReq {}
+
+message GetClassesResp {
+  repeated Class classes = 1;
+}
+
+message GetStudentsReq {}
+
+message GetStudentsResp {
+  repeated Student students = 1;
+}
+
+message GetExerciseReq {
+  int64 exercise_id = 1;
+}
+
+message GetExerciseResp {
+  Exercise exercise = 1;
+}
+
+message AddExerciseReq {
+  string title = 1;
+  string description = 2;
+  Language language = 3;
+  ExerciseEstimator estimator = 4;
+}
+
+message AddExerciseResp {
+  int64 exercise_id = 1;
+}
+
+message EditExerciseReq {
+  int64 exercise_id = 1;
+  string title = 2;
+  string description = 3;
+  Language language = 4;
+  bool language_set = 5;
+  ExerciseEstimator estimator = 6;
+  bool estimator_set = 7;
+}
+
+message EditExerciseResp {}
+
+message RemoveExerciseReq {
+  int64 exercise_id = 1;
+}
+
+message RemoveExerciseResp {}
+
+message GetExercisesReq {
+  int64 student_id = 1;
+}
+
+message GetExercisesResp {
+  repeated Exercise exercises = 1;
+}
+
+message GetExerciseAssignmentsReq {
+  int64 exercise_id = 1;
+}
+
+message GetExerciseAssignmentsResp {
+  repeated int64 student_ids = 1;
+}
+
+message AssignExerciseReq {
+  int64 exercise_id = 1;
+  int64 class_id = 2;
+  int64 student_id = 3;
+}
+
+message AssignExerciseResp {}
+
+message WithdrawExerciseReq {
+  int64 exercise_id = 1;
+  int64 class_id = 2;
+  int64 student_id = 3;
+}
+
+message WithdrawExerciseResp {}
+
+message AddTestReq {
+  int64 exercise_id = 1;
+  TestType type = 2;
+  string name = 3;
+  string max_duration = 4;
+  string max_memory = 5;
+  string stdin = 6;
+  string expected_stdout = 7;
+  Language checker_language = 8;
+  string checker_source = 9;
+}
+
+message AddTestResp {
+  int64 test_id = 1;
+}
+
+message EditTestReq {
+  int64 test_id = 1;
+  string name = 2;
+  string max_duration = 3;
+  string max_memory = 4;
+  string stdin = 5;
+  bool stdin_set = 6;
+  string expected_stdout = 7;
+  bool expected_stdout_set = 8;
+  Language checker_language = 9;
+  bool checker_language_set = 10;
+  string checker_source = 11;
+}
+
+message EditTestResp {}
+
+message RemoveTestReq {
+  int64 test_id = 1;
+}
+
+message RemoveTestResp {}
+
+message GetTestsReq {
+  int64 exercise_id = 1;
+  int64 student_id = 2;
+}
+
+message GetTestsResp {
+  repeated Test tests = 1;
+}
+
+message AddSolutionReq {
+  int64 exercise_id = 1;
+  string source = 2;
+}
+
+message AddSolutionResp {
+  int64 solution_id = 1;
+}
+
+message GetSolutionsReq {
+  int64 exercise_id = 1;
+  int64 student_id = 2;
+}
+
+message GetSolutionsResp {
+  repeated Solution solutions = 1;
+}
+
+message GetSolutionTestsReq {
+  int64 student_id = 1;
+  int64 solution_id = 2;
+}
+
+message GetSolutionTestsResp {
+  repeated SolutionTest solution_tests = 1;
+}

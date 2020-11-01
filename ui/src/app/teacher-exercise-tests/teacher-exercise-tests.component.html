@@ -1,0 +1,75 @@
+<div class="header">
+  <div class="header-content">
+    <h1>
+      Тесты для задачи
+      <ng-container *ngIf="exercise">
+        <span class="grey">#{{exerciseID}}</span>
+        {{exercise.title}}
+        <span class="grey">на языке {{languageNames[exercise.language]}}</span>
+      </ng-container>
+    </h1>
+  </div>
+</div>
+
+<div class="page-buttons">
+  <span class="spacer"></span>
+  <button mat-fab color="primary" class="new-button" (click)="newTest()">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>
+
+<mat-accordion class="content">
+  <mat-expansion-panel class="item" *ngFor="let t of tests; first as isFirst">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <span>
+          <span class="grey">#{{t.id}}</span>
+          {{t.name}}
+        </span>
+        <div class="spacer"></div>
+        <button mat-icon-button color="primary" (click)="$event.stopPropagation(); edit(t)">
+          <mat-icon>settings</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="$event.stopPropagation(); remove(t)">
+          <mat-icon>delete_forever</mat-icon>
+        </button>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="form">
+      <mat-form-field>
+        <mat-label>Тип</mat-label>
+        <mat-select placeholder="Выберите тип" [value]="t.type" readonly>
+          <mat-option [value]="t.type">{{ testTypesNames[t.type]   }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div class="row">
+        <mat-form-field>
+          <mat-label>Максимальная длительность</mat-label>
+          <input matInput [value]="formatDurationBack(t.max_duration)" readonly>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Максимальная память</mat-label>
+          <input matInput [value]="formatMemoryBack(t.max_memory)" readonly>
+        </mat-form-field>
+      </div>
+      <mat-form-field>
+        <mat-label>Ввод</mat-label>
+        <textarea matInput cdkTextareaAutosize readonly>{{t.stdin}}</textarea>
+      </mat-form-field>
+      <mat-form-field *ngIf="t.type === simpleTestType">
+        <mat-label>Ожидаемый вывод</mat-label>
+        <textarea matInput cdkTextareaAutosize readonly>{{t.expected_stdout}}</textarea>
+      </mat-form-field>
+      <mat-form-field *ngIf="t.type === checkerTestType">
+        <mat-label>Язык программирования чекера</mat-label>
+        <mat-select [value]="t.checker_language" readonly>
+          <mat-option [value]="t.checker_language">{{ languageNames[t.checker_language] }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field *ngIf="t.type === checkerTestType">
+        <mat-label>Исходный код чекера</mat-label>
+        <textarea matInput cdkTextareaAutosize readonly>{{t.checker_source}}</textarea>
+      </mat-form-field>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>

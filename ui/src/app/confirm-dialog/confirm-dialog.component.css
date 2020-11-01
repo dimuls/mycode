@@ -1,0 +1,19 @@
+.content {
+  max-width: 40em;
+  width: 100%;
+}
+
+.buttons {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: row-reverse;
+}
+
+.buttons button {
+  margin-right: 0.5em;
+}
+
+.buttons button:first-of-type {
+  margin-right: 0;
+}

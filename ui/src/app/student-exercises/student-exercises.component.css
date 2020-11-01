@@ -1,0 +1,87 @@
+@import "../common/page.css";
+
+h2, h2:first-of-type {
+  margin-top: 1em;
+}
+
+.exercises:first-of-type h2 {
+  margin-top: 0;
+}
+
+h3 {
+  padding: 0;
+  margin: 0.5em 0 0 0;
+}
+
+.content {
+  padding-top: 2em;
+  padding-bottom: 2em;
+}
+
+.notif {
+  margin-top: 1em;
+}
+
+mat-divider {
+  margin: 2em 0 0 0;
+}
+
+pre {
+  margin: 0.5em 0 0 0;
+}
+
+.tests {
+  margin-top: 1em;
+}
+
+.test-icon {
+  margin-top: -0.1em;
+  margin-right: 0.1em;
+}
+
+.content > *:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.row {
+  display: flex;
+}
+
+mat-form-field, .row mat-form-field {
+  width: 100%;
+}
+
+.row mat-form-field {
+  margin-left: 1em;
+}
+
+.row mat-form-field:first-of-type {
+  margin-left: 0;
+}
+
+.buttons {
+  display: flex;
+  margin-top: 1em;
+}
+
+.mat-expansion-panel-spacing {
+  margin-top: 1em !important;
+  margin-bottom: 1em !important;
+}
+
+.mat-expansion-panel-spacing:last-of-type {
+  margin-bottom: 0 !important;
+}
+
+.source {
+  margin-top: 1em;
+}
+
+.buttons {
+  margin-top: 0;
+}
+
+h3 {
+  display: flex;
+}

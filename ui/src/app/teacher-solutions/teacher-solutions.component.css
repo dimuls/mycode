@@ -1,0 +1,58 @@
+@import "../common/page.css";
+
+h2 {
+  padding: 0;
+}
+
+h3 {
+  padding: 0;
+  margin: 1em 0 0 0;
+  display: flex;
+}
+
+.content.exercises {
+  padding-top: 2em;
+}
+
+mat-divider {
+  margin: 2em 0;
+}
+
+.red {
+  color: red;
+}
+
+.tests {
+  margin-top: 0.6em;
+}
+
+.test {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+}
+
+.row mat-form-field {
+  display: block;
+  flex-grow: 1;
+}
+
+.row mat-form-field {
+  margin-left: 1em;
+}
+
+.row mat-form-field:first-of-type {
+  margin-left: 0;
+}
+
+.test-icon {
+  margin-top: -0.1em;
+  margin-right: 0.1em;
+}
+
+pre {
+  margin: 0;
+}

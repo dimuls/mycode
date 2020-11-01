@@ -1,0 +1,130 @@
+<div class="header">
+  <div class="header-content">
+    <h1>
+      Решения
+      <ng-container *ngIf="student">
+        <span class="grey">ученика #{{student.id}}</span>
+        {{student.name}}
+        <span class="grey">из класса</span>
+        {{classesNames[student.class_id]}}
+      </ng-container>
+    </h1>
+  </div>
+</div>
+
+<ng-container *ngIf="!loading">
+
+<div class="search-bar" *ngIf="!student">
+  <div class="search-bar-content">
+    <mat-form-field appearance="standard">
+      <mat-label>Поиск ученика</mat-label>
+      <input matInput placeholder="Введите класс или имя ученика" (keyup)="searchQueries.next($event.target.value)">
+    </mat-form-field>
+  </div>
+</div>
+
+<div class="content" *ngIf="!student">
+  <ng-container *ngIf="!foundStudents">
+    <ng-container *ngFor="let c of foundClasses ? foundClasses : classes; first as isFirst">
+        <mat-divider *ngIf="!isFirst"></mat-divider>
+        <h2>
+          <span>
+            <span class="grey">#{{c.id}}</span>
+            {{c.name}}
+            <span class="grey">класс</span>
+          </span>
+        </h2>
+        <div>
+          <a mat-button *ngFor="let s of classesStudents[c.id]" color="primary"
+             [routerLink]="['.']" [queryParams]="{ student_id: s.id }">
+            <span class="grey">#{{s.id}}</span>
+            {{s.name}}
+          </a>
+        </div>
+    </ng-container>
+  </ng-container>
+  <ng-container *ngIf="foundStudents">
+    <div *ngFor="let s of foundStudents">
+      <a mat-button color="primary" [routerLink]="['.']"
+         [queryParams]="{ student_id: s.id }">
+        <span class="grey">#{{s.id}}</span>
+        {{s.name}}
+        <span class="grey">из класса {{classesNames[s.class_id]}}</span>
+      </a>
+    </div>
+  </ng-container>
+</div>
+
+<div class="content exercises" *ngIf="student">
+  <ng-container *ngFor="let e of exercises; first as isFirst">
+    <mat-divider *ngIf="!isFirst"></mat-divider>
+    <h2>
+      <span>
+        Решение задачи
+        <span class="grey">#{{e.id}}</span>
+        {{e.title}}
+        <span class="grey">на языке</span>
+        {{languages[e.language]}}
+      </span>
+    </h2>
+    <ng-container *ngIf="!solutions[e.id]">
+      <h3><i class="red">Нет решений</i></h3>
+    </ng-container>
+    <mat-accordion *ngIf="solutions[e.id]">
+      <ng-container *ngFor="let s of solutions[e.id]">
+        <h3>
+          <span>
+            Решение
+            <span class="grey">#{{s.id}}</span>:
+            <span [style]="{color: scores[s.id].color}">
+              тесты
+              {{solutionsStats[s.id].succeed+' из '+solutionsStats[s.id].total}}
+            </span>
+          </span>
+          <span class="spacer"></span>
+          <span *ngIf="scores[s.id]" [style]="{color: scores[s.id].color}">
+            баллы {{scores[s.id].score}}
+          </span>
+        </h3>
+        <pre><code [highlight]="s.source" [lineNumbers]="true"></code></pre>
+        <div class="tests" *ngIf="solutionsStats[s.id].processing === 0 && solutionsStats[s.id].failed > 0">
+          <mat-expansion-panel *ngFor="let st of solutionTests[s.id]">
+            <mat-expansion-panel-header>
+              <mat-icon class="test-icon" style="color: green" *ngIf="st.status === 'succeed'">check</mat-icon>
+              <mat-icon class="test-icon" color="warn" *ngIf="st.status !== 'succeed'">close</mat-icon>
+              <span>
+                Тест <span class="grey">#{{st.test_id}}</span> {{tests[st.test_id].name}}
+              </span>
+            </mat-expansion-panel-header>
+            <div class="test">
+              <div class="row">
+                <mat-form-field [ngClass]="{ 'fail': st.fails.wrong_duration }">
+                  <mat-label>Длительность</mat-label>
+                  <input matInput [value]="formatDurationBack(st.duration)" readonly>
+                </mat-form-field>
+                <mat-form-field [ngClass]="{ 'fail': st.fails.wrong_used_memory }">
+                  <mat-label>Использовано памяти</mat-label>
+                  <input matInput [value]="formatMemoryBack(st.used_memory)" readonly>
+                </mat-form-field>
+              </div>
+              <mat-form-field [ngClass]="{ 'fail': st.fails.wrong_stdout }">
+                <mat-label>Вывод</mat-label>
+                <textarea matInput cdkTextareaAutosize readonly>{{st.stdout}}</textarea>
+              </mat-form-field>
+              <mat-form-field class="fail" *ngIf="st.stderr">
+                <mat-label>Вывод ошибок</mat-label>
+                <textarea matInput cdkTextareaAutosize readonly>{{st.stderr}}</textarea>
+              </mat-form-field>
+              <mat-form-field class="fail" *ngIf="st.fails.wrong_checker">
+                <mat-label>Проверка чекером</mat-label>
+                <textarea matInput cdkTextareaAutosize readonly>Провалилась</textarea>
+              </mat-form-field>
+            </div>
+          </mat-expansion-panel>
+        </div>
+      </ng-container>
+    </mat-accordion>
+  </ng-container>
+</div>
+
+</ng-container>

@@ -1,0 +1,8 @@
+<div class="content">
+  <h1>{{data.message}}</h1>
+  <p *ngIf="data.description" [innerHTML]="data.description"></p>
+  <div class="buttons">
+    <button mat-button color="primary" (click)="no()">Нет</button>
+    <button mat-raised-button color="warn" (click)="yes()">Да</button>
+  </div>
+</div>

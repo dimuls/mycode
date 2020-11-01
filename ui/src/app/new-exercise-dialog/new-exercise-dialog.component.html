@@ -1,0 +1,41 @@
+<form [formGroup]="form" (ngSubmit)="add()">
+  <h1>Новое упражнение</h1>
+  <mat-form-field appearance="fill">
+    <mat-label>Заголовок</mat-label>
+    <input matInput placeholder="Введите заголовок" formControlName="title" required>
+    <mat-error>
+      Требуется заполнить
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Описание</mat-label>
+    <textarea matInput cdkTextareaAutosize placeholder="Введите описание" formControlName="description" required></textarea>
+    <mat-error>
+      Требуется заполнить
+    </mat-error>
+  </mat-form-field>
+  <div class="row">
+    <mat-form-field appearance="fill">
+      <mat-label>Язык программирования</mat-label>
+      <mat-select placeholder="Выберите язык программирования" formControlName="language">
+        <mat-option *ngFor="let l of languages" [value]="l.id">{{ l.name }}</mat-option>
+      </mat-select>
+      <mat-error>
+        Требуется заполнить
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Алгоритм оценивания</mat-label>
+      <mat-select placeholder="Выберите алгоритм оценивания" formControlName="estimator">
+        <mat-option *ngFor="let e of estimators" [value]="e.id">{{ e.name }}</mat-option>
+      </mat-select>
+      <mat-error>
+        Требуется заполнить
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div class="buttons">
+    <button mat-raised-button color="primary">Добавить</button>
+    <button mat-raised-button (click)="cancel()">Отмена</button>
+  </div>
+</form>

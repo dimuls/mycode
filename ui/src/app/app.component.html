@@ -1,0 +1,19 @@
+<div class="toolbar" *ngIf="userRole">
+  <div class="toolbar-content">
+    <span class="toolbar-title">МойКод</span>
+
+    <ng-container *ngIf="userRole == teacherUR">
+      <a mat-button routerLink="/teacher/solutions">Решения</a>
+      <a mat-button routerLink="/teacher/exercises">Задачи</a>
+    </ng-container>
+
+    <ng-container *ngIf="userRole == studentUR">
+      <a mat-button routerLink="/student/exercises">Задачи</a>
+    </ng-container>
+
+    <span class="spacer"></span>
+    <button mat-button (click)="logout()">Выйти</button>
+  </div>
+</div>
+
+<router-outlet #outlet="outlet"></router-outlet>

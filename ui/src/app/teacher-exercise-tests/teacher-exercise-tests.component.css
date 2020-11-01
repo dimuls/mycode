@@ -1,0 +1,12 @@
+@import "../common/page.css";
+@import "../common/dialog.css";
+
+.content {
+  padding-top: 2em;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-content: stretch;
+}

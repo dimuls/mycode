@@ -1,0 +1,132 @@
+<div class="header">
+  <div class="header-content">
+    <h1>
+      Назначения задачи
+      <ng-container *ngIf="exercise">
+        <span class="grey">#{{exerciseID}}</span>
+        {{exercise.title}}
+        <span class="grey">на языке {{languages[exercise.language]}}</span>
+      </ng-container>
+    </h1>
+  </div>
+</div>
+
+<div class="search-bar">
+  <div class="search-bar-content">
+    <mat-form-field appearance="standard">
+      <mat-label>Поиск</mat-label>
+      <input matInput placeholder="Введите класс или имя ученика" (keyup)="searchQueries.next($event.target.value)">
+    </mat-form-field>
+  </div>
+</div>
+
+<div class="content">
+  <ng-container *ngIf="!foundClasses && !foundStudents">
+    <ng-container *ngFor="let c of classes; first as isFirst">
+      <mat-divider *ngIf="!isFirst"></mat-divider>
+      <h2>
+        <span>
+          <span class="grey">#{{c.id}}</span>
+          {{c.name}}
+          <span class="grey">класс</span>
+        </span>
+        <span class="spacer"></span>
+        <button mat-button color="primary" *ngIf="!classAssigned(c)"
+          (click)="assignToClass(c)">
+          <mat-icon>work</mat-icon>
+          назначить всему классу
+        </button>
+        <button mat-button color="warn" *ngIf="!classWithdrawn(c)"
+          (click)="withdrawFromClass(c)">
+          <mat-icon>work_off</mat-icon>
+          снять со всего класса
+        </button>
+      </h2>
+      <mat-expansion-panel class="item" *ngFor="let s of students[c.id]" readonly>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <span class="grey">#{{s.id}}</span>
+            <span class="item-title">{{s.name}}</span>
+            <span class="spacer"></span>
+            <button mat-icon-button color="primary" *ngIf="!studentAssigned(s)"
+                    (click)="assignToStudent(s)">
+              <mat-icon>work</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" *ngIf="studentAssigned(s)"
+                    (click)="withdrawFromStudent(s)">
+              <mat-icon>work_off</mat-icon>
+            </button>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+      </mat-expansion-panel>
+    </ng-container>
+  </ng-container>
+
+  <ng-container *ngIf="foundStudents">
+    <i *ngIf="!foundStudents.length">
+      По данному запросу ничего не найдено
+    </i>
+    <mat-expansion-panel class="item" *ngFor="let s of foundStudents" readonly>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <span class="grey">#{{s.id}}</span>
+          <span class="item-title">{{s.name}}</span>
+          <span class="grey">из класса {{classesNames[s.class_id]}}</span>
+          <span class="spacer"></span>
+          <button mat-icon-button color="primary" *ngIf="!studentAssigned(s)"
+                  (click)="assignToStudent(s)">
+            <mat-icon>work</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" *ngIf="studentAssigned(s)"
+                  (click)="withdrawFromStudent(s)">
+            <mat-icon>work_off</mat-icon>
+          </button>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+    </mat-expansion-panel>
+  </ng-container>
+
+  <ng-container *ngIf="foundClasses">
+    <i *ngIf="!foundClasses.length">
+      По данному запросу ничего не найдено
+    </i>
+    <ng-container *ngFor="let c of foundClasses; first as isFirst">
+      <mat-divider *ngIf="!isFirst"></mat-divider>
+      <h2>
+        <span>
+          <span class="grey">#{{c.id}}</span>
+          {{c.name}}
+          <span class="grey">класс</span>
+        </span>
+        <span class="spacer"></span>
+        <button mat-button color="primary" *ngIf="!classAssigned(c)"
+                (click)="assignToClass(c)">
+          <mat-icon>work</mat-icon>
+          назначить всему классу
+        </button>
+        <button mat-button color="warn" *ngIf="!classWithdrawn(c)"
+                (click)="withdrawFromClass(c)">
+          <mat-icon>work_off</mat-icon>
+          снять со всего класса
+        </button>
+      </h2>
+      <mat-expansion-panel class="item" *ngFor="let s of students[c.id]" readonly>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <span class="grey">#{{s.id}}</span>
+            <span class="item-title">{{s.name}}</span>
+            <span class="spacer"></span>
+            <button mat-icon-button color="primary" *ngIf="!studentAssigned(s)"
+              (click)="assignToStudent(s)">
+              <mat-icon>work</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" *ngIf="studentAssigned(s)"
+              (click)="withdrawFromStudent(s)">
+              <mat-icon>work_off</mat-icon>
+            </button>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+      </mat-expansion-panel>
+    </ng-container>
+  </ng-container>
+</div>

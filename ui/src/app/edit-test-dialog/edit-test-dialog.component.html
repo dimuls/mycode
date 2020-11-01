@@ -1,0 +1,78 @@
+<form [formGroup]="form" (ngSubmit)="edit()">
+  <h1>Тест #{{originalTest.id}}</h1>
+  <mat-form-field appearance="fill">
+    <mat-label>Тип</mat-label>
+    <mat-select placeholder="Выберите тип" formControlName="type" readonly>
+      <mat-option *ngFor="let t of types" [value]="t.id">{{ t.name }}</mat-option>
+    </mat-select>
+    <mat-error>
+      Требуется выбрать
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Название</mat-label>
+    <input matInput placeholder="Введите название" formControlName="name">
+    <mat-error>
+      Требуется заполнить
+    </mat-error>
+  </mat-form-field>
+  <div class="row">
+    <mat-form-field appearance="fill">
+      <mat-label>Максимальная длительность</mat-label>
+      <input matInput placeholder="Введите максимальную длительность"
+             formControlName="max_duration">
+      <mat-error *ngIf="form.controls.max_duration.hasError('required')">
+        Требуется заполнить
+      </mat-error>
+      <mat-error *ngIf="form.controls.max_duration.hasError('pattern')">
+        Неверный формат
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Максимальная память</mat-label>
+      <input matInput placeholder="Введите максимальную память"
+             formControlName="max_memory">
+      <mat-error *ngIf="form.controls.max_memory.hasError('required')">
+        Требуется заполнить
+      </mat-error>
+      <mat-error *ngIf="form.controls.max_memory.hasError('pattern')">
+        Неверный формат
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <mat-form-field appearance="fill">
+    <mat-label>Ввод</mat-label>
+    <textarea matInput placeholder="Введите ввод" cdkTextareaAutosize
+              formControlName="stdin"></textarea>
+  </mat-form-field>
+  <ng-container *ngIf="form.controls.type.value === simpleTestType">
+    <mat-form-field appearance="fill">
+      <mat-label>Ожидаемый вывод</mat-label>
+      <textarea matInput placeholder="Введите ожидаемый вывод" cdkTextareaAutosize
+                formControlName="expected_stdout"></textarea>
+    </mat-form-field>
+  </ng-container>
+  <ng-container *ngIf="form.controls.type.value === checkerTestType">
+    <mat-form-field appearance="fill">
+      <mat-label>Язык программирования чекера</mat-label>
+      <mat-select placeholder="Выберите язык программирования чекера" formControlName="checker_language">
+        <mat-option *ngFor="let l of languages" [value]="l.id">{{ l.name }}</mat-option>
+      </mat-select>
+      <mat-error>
+        Требуется выбрать
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Исходный код чекера</mat-label>
+      <textarea matInput placeholder="Введите исходный код чекера" cdkTextareaAutosize
+                formControlName="checker_source"></textarea>
+      <mat-error>
+        Требуется заполнить
+      </mat-error>
+    </mat-form-field>
+  </ng-container>
+  <div class="buttons">
+    <button mat-raised-button color="primary">Сохранить</button>
+    <button mat-raised-button (click)="cancel()">Отмена</button>
+  </div>
+</form>

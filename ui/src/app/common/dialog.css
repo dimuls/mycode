@@ -1,0 +1,35 @@
+form {
+  display: flex;
+  flex-direction: column;
+  align-content: stretch;
+}
+
+.row {
+  display: flex;
+}
+
+.row mat-form-field {
+  margin-left: 1em;
+  width: 100%;
+}
+
+.row mat-form-field:first-of-type {
+  margin-left: 0;
+}
+
+form {
+  width: 40em;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.buttons button {
+  margin-left: 0.5em;
+}
+
+.buttons button:first-of-type {
+  margin-left: 0;
+}

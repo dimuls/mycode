@@ -1,0 +1,11 @@
+[Unit]
+Description=mycode-runner
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=5s
+ExecStart=/usr/sbin/mycode-runner
+
+[Install]
+WantedBy=multi-user.target

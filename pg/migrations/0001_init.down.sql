@@ -1,0 +1,9 @@
+drop table solution_test;
+drop table test;
+drop table solution;
+drop table student_exercise;
+drop table student;
+drop table class;
+drop table exercise;
+drop table teacher;
+drop table "user";

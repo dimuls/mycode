@@ -1,0 +1,46 @@
+<div class="header">
+  <div class="header-content">
+    <h1>Задачи</h1>
+  </div>
+</div>
+
+<div class="page-buttons">
+  <span class="spacer"></span>
+  <button mat-fab color="primary" class="new-button" (click)="newExercise()">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>
+
+<mat-accordion class="content">
+  <ng-container *ngFor="let eg of exercises | keyvalue; first as isFirst">
+    <mat-divider *ngIf="!isFirst"></mat-divider>
+    <h2>
+      <span>
+        <span class="grey">Язык: </span>
+        {{languageNames[eg.key]}}
+      </span>
+    </h2>
+    <mat-expansion-panel class="item" *ngFor="let e of eg.value">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <span class="grey">#{{e.id}}</span>
+          <span class="item-title">{{e.title}}</span>
+          <span class="spacer"></span>
+          <a mat-icon-button color="primary" [routerLink]="['/teacher/exercise', e.id, 'assignments']" (click)="$event.stopPropagation()">
+            <mat-icon>work</mat-icon>
+          </a>
+          <a mat-icon-button color="primary" (click)="$event.stopPropagation()" [routerLink]="['/teacher/exercise/', e.id, 'tests']">
+            <mat-icon>fact_check</mat-icon>
+          </a>
+          <button mat-icon-button color="primary" (click)="$event.stopPropagation(); edit(e)">
+            <mat-icon>settings</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="$event.stopPropagation(); remove(e)">
+            <mat-icon>delete_forever</mat-icon>
+          </button>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <markdown>{{ e.description }}</markdown>
+    </mat-expansion-panel>
+  </ng-container>
+</mat-accordion>

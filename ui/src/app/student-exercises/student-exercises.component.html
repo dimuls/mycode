@@ -1,0 +1,103 @@
+<div class="header">
+  <div class="header-content">
+    <h1>Задачи</h1>
+  </div>
+</div>
+
+<mat-accordion class="content" *ngIf="!loading">
+  <ng-container *ngFor="let e of exercises | keyvalue; first as isFirst">
+    <ng-container *ngFor="let e of e.value">
+      <mat-divider *ngIf="!isFirst"></mat-divider>
+      <div class="exercises">
+        <h2>
+          <span>
+            Задача
+            <span class="grey">#{{e.id}}</span>
+            {{e.title}}
+            <span class="grey">на языке</span>
+            {{languageNames[e.language]}}
+          </span>
+        </h2>
+        <markdown class="descr">
+          {{e.description}}
+        </markdown>
+        <div *ngIf="latestSolutions[e.id]">
+          <h3>
+            <span>
+              Последнее решение
+              <span class="grey">#{{latestSolutions[e.id].id}}</span>:
+              <span [style]="{color: scores[latestSolutions[e.id].id].color}">
+                тесты
+                {{solutionsStats[latestSolutions[e.id].id].succeed+' из '+solutionsStats[latestSolutions[e.id].id].total}}
+              </span>
+            </span>
+            <span class="spacer"></span>
+            <span *ngIf="scores[latestSolutions[e.id].id]" [style]="{color: scores[latestSolutions[e.id].id].color}">
+              баллы {{scores[latestSolutions[e.id].id].score}}
+            </span>
+          </h3>
+          <pre><code [highlight]="latestSolutions[e.id].source" [lineNumbers]="true"></code></pre>
+          <!--div class="tests" *ngIf="solutionsStats[latestSolutions[e.id].id].processing === 0 && solutionsStats[latestSolutions[e.id].id].failed > 0">
+            <mat-expansion-panel *ngFor="let st of solutionTests[latestSolutions[e.id].id]">
+              <mat-expansion-panel-header>
+                <mat-icon class="test-icon" style="color: green" *ngIf="st.status === 'succeed'">check</mat-icon>
+                <mat-icon class="test-icon" color="warn" *ngIf="st.status !== 'succeed'">close</mat-icon>
+                <span>
+                  Тест <span class="grey">#{{st.test_id}}</span> {{tests[st.test_id].name}}
+                </span>
+              </mat-expansion-panel-header>
+              <div class="test">
+                <div class="row">
+                  <mat-form-field [ngClass]="{ 'fail': st.fails.wrong_duration }">
+                    <mat-label>Длительность</mat-label>
+                    <input matInput [value]="formatDurationBack(st.duration)" readonly>
+                  </mat-form-field>
+                  <mat-form-field [ngClass]="{ 'fail': st.fails.wrong_used_memory }">
+                    <mat-label>Использовано памяти</mat-label>
+                    <input matInput [value]="formatMemoryBack(st.used_memory)" readonly>
+                  </mat-form-field>
+                </div>
+                <mat-form-field [ngClass]="{ 'fail': st.fails.wrong_stdout }">
+                  <mat-label>Вывод</mat-label>
+                  <textarea matInput cdkTextareaAutosize readonly>{{st.stdout}}</textarea>
+                </mat-form-field>
+                <mat-form-field class="fail" *ngIf="st.stderr">
+                  <mat-label>Вывод ошибок</mat-label>
+                  <textarea matInput cdkTextareaAutosize readonly>{{st.stderr}}</textarea>
+                </mat-form-field>
+                <mat-form-field class="fail" *ngIf="st.fails.wrong_checker">
+                  <mat-label>Проверка чекером</mat-label>
+                  <textarea matInput cdkTextareaAutosize readonly>Провалилась</textarea>
+                </mat-form-field>
+              </div>
+            </mat-expansion-panel>
+          </div-->
+        </div>
+        <div class="notif" *ngIf="!exercisesTests[e.id]">
+          <i>Задача пока не имеет тестов, загрузить результаты нельзя</i>
+        </div>
+        <mat-form-field *ngIf="exercisesTests[e.id] && (!latestSolutions[e.id] || solutionsStats[latestSolutions[e.id].id].failed > 0)" class="source" appearance="fill">
+          <mat-label>Исходный код</mat-label>
+          <textarea matInput placeholder="Введите исходный код" cdkTextareaAutosize
+            [(ngModel)]="sources[e.id]"></textarea>
+        </mat-form-field>
+        <div class="buttons" *ngIf="exercisesTests[e.id] && (!latestSolutions[e.id] || solutionsStats[latestSolutions[e.id].id].failed > 0)">
+          <ng-container *ngIf="!sources[e.id]">
+            <input hidden (change)="addSolution(e, solutionFile.files.item(0))"
+                   #solutionFile type="file" [accept]="'.'+languageExtensions[e.language]">
+            <button *ngIf="solutions[e.id]" mat-raised-button color="primary"
+                    (click)="solutionFile.click()">Загрузить новое решение</button>
+            <button *ngIf="!solutions[e.id]" mat-raised-button color="primary"
+                    (click)="solutionFile.click()">Загрузить решение</button>
+          </ng-container>
+          <ng-container *ngIf="sources[e.id]">
+            <button *ngIf="solutions[e.id]" mat-raised-button color="primary"
+                    (click)="addSolution(e)">Загрузить новое решение</button>
+            <button *ngIf="!solutions[e.id]" mat-raised-button color="primary"
+                    (click)="addSolution(e)">Загрузить решение</button>
+          </ng-container>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+</mat-accordion>

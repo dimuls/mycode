@@ -1,0 +1,11 @@
+[Unit]
+Description=mycode-api
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=5s
+ExecStart=/usr/sbin/mycode-api -jwt-secret nexae6PhIm8toacoki7iPhahovie4AeMXeigh5zeVaex5thibi5Zei1uWiDeeY1w -postgres-uri "postgres://mycode:mycode@localhost/mycode?sslmode=disable"
+
+[Install]
+WantedBy=multi-user.target

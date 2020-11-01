@@ -1,0 +1,6 @@
+<mat-card>
+  <mat-card-title>Страница не найдена</mat-card-title>
+  <mat-card-content *ngIf="!authService.loggedIn">
+    Попробуйте <a [routerLink]="['/login']">войти</a>,
+    может быть найдётся.</mat-card-content>
+</mat-card>
